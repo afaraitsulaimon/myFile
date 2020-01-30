@@ -1,0 +1,207 @@
+.newGround{
+
+	width: 100%;
+  height: 100%;
+  background-color: rgba(19,103,239,0.5);
+    position: absolute;
+}
+
+.top-menu .navbar-nav button{
+		background:transparent;
+	margin-right: 10px;
+	border-radius: 5px;
+	border: 2px solid white;
+
+}
+
+.top-menu .navbar-nav button a{
+	color: white;
+	font-weight: bold;
+}
+
+.top-menu .navbar-nav button:hover{
+		background-color: blue;
+	border: 2px solid white;
+
+}
+
+.top-menu .navbar-nav button a:hover{
+
+	color: white;
+	font-weight: bold;
+}
+.theContent{
+    margin-top: 200px;
+
+}
+
+
+.theContent h1{
+
+	font-size: 80px;
+	letter-spacing: 10px;
+}
+
+.theContent p{
+
+	font-size: 40px;
+	color: white;
+}
+
+
+.theContent button{
+  width: 200px;
+   height: 40px;
+   font-size: 1.2em;
+   font-weight: bold;
+   border: 2px solid blue;
+   text-decoration: none;
+   border-radius: 5px;
+}
+
+.theContent button a{
+  
+   text-decoration: none;
+   color: blue;
+}
+
+.theContent button:hover{
+  background-color: rgba(19,103,239,0.5);
+  border: 2px solid white;
+   color: white;
+
+}
+
+.theContent button a:hover{
+     color: white;
+}
+
+
+
+footer{
+
+	margin-top: 260px;
+}
+
+
+.navbar .navbar-brand{
+
+  color: white;
+  font-size: 2em;
+  font-weight: bold;
+  
+}
+
+.navbar .navbar-brand{
+
+  color: black;
+  font-size: 2em;
+  font-weight: bold;
+  
+}
+
+.navbar .navbar-brand:hover{
+
+  color: white;
+  
+  
+}
+
+.navbar button a{
+
+  color: black;
+  font-size: 1.2em;
+  font-weight: bolder;
+  
+}
+
+.navbar button a:hover{
+
+  color: white;
+  font-weight: bold;
+
+}
+
+.navbar button{
+
+  background-color: blue;
+  border: 2px solid white;
+  margin: 5px;
+  border-radius: 5px;
+}
+
+.navbar button:hover{
+
+  background-color: transparent;
+  font-style: all;
+  border:2px solid blue;
+
+}
+  
+.submitButton button{
+
+  border: 2px solid blue;
+  font-weight: bold;
+}
+
+.submitButton button:hover{
+
+  background-color: blue;
+  color: white;
+  border: 2px solid white;
+}
+
+
+.logInStore{
+
+  margin-top: 150px;
+}
+
+.logInStore button{
+
+   width: 150px;
+   height: 35px;
+   border-radius: 5px;
+   border: 2px solid blue;
+   font-weight: bold;
+}
+
+
+.logInStore button:hover{
+
+   background-color: blue;
+   border: 2px solid white;
+   color: white;
+}
+
+
+
+.resetPassWord{
+
+ margin-top: 120px;
+}
+
+
+.resetPassWord button{
+
+  width: 200px;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid blue;
+  background-color: white;
+  font-weight: bold;
+  color: blue;
+}
+
+.resetPassWord button:hover{
+
+ background-color: black;
+ color: white;
+ border: 2px solid white;
+}
+
+
+
+
+
+
