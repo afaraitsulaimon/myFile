@@ -78,10 +78,14 @@
        $table .= "<th>Delete</th>";
        $table .= "</tr>";
 
+       $sNums = 1;
+
        while ($fetchFoundFile = mysqli_fetch_assoc($queryPickTheSearch)) {
 
        	$table .= "<tr>";
-       	$table .= "<td></td>";
+       	$table .= "<td>{$sNums}</td>";
+        $sNums++;
+        
        	$table .= "<td>{$fetchFoundFile['file_no']}</td>";
        	$table .= "<td>{$fetchFoundFile['file_picker']}</td>";
        	$table .= "<td>{$fetchFoundFile['file_user']}</td>";

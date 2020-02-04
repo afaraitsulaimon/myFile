@@ -26,11 +26,14 @@
    	    	$table .= "<th>Department</th>";
    	    	$table .= "<th>Registered Date</th>";
    	    	$table .= "</tr>";
+          
+          $allA = 1;
 
    	    	while ($fetchAllAdmins = mysqli_fetch_assoc($queryAllTheAdmins)) {
 
    	    		$table .= "<tr>";
-   	    		$table .= "<td></td>";
+   	    		$table .= "<td>{$allA}</td>";
+            $allA++;
    	    		$table .= "<td>{$fetchAllAdmins['storeAdmin_name']}</td>";
    	    		$table .= "<td>{$fetchAllAdmins['storeAdmin_username']}</td>";
    	    		$table .= "<td>{$fetchAllAdmins['storeAdmin_code']}</td>";
@@ -72,11 +75,14 @@
           $table .= "<th>Delete</th>";
    	    	$table .= "</tr>";
 
+        
+         $sLc = 1;
 
    	    	while ($fetchLcAdmins = mysqli_fetch_assoc($queryLcAdmins)) {
    	    		
    	    		$table .= "<tr>";
-   	    		$table .= "<td></td>";
+   	    		$table .= "<td>{$sLc}</td>";
+            $sLc++;
    	    		$table .= "<td>{$fetchLcAdmins['storeAdmin_name']}</td>";
    	    		$table .= "<td>{$fetchLcAdmins['storeAdmin_username']}</td>";
    	    		$table .= "<td>{$fetchLcAdmins['storeAdmin_code']}</td>";
@@ -123,11 +129,12 @@
           $table_bills .= "<th>Delete</th>";
    	    	$table_bills  .= "</tr>";
 
-
+          $sBills = 1;
    	    	while ($fetchBillsAdmins = mysqli_fetch_assoc($queryBillsAdmins)) {
    	    		
    	    		$table_bills  .= "<tr>";
-   	    		$table_bills  .= "<td></td>";
+   	    		$table_bills  .= "<td>{$sBills}</td>";
+            $sBills++;
    	    		$table_bills  .= "<td>{$fetchBillsAdmins['storeAdmin_name']}</td>";
    	    		$table_bills  .= "<td>{$fetchBillsAdmins['storeAdmin_username']}</td>";
    	    		$table_bills  .= "<td>{$fetchBillsAdmins['storeAdmin_code']}</td>";
@@ -174,11 +181,14 @@
             $table_nonValid  .= "<th>Delete</th>";
             $table_nonValid  .= "</tr>";
 
+            $sNon = 1;
+
 
             while ($fetchNonValidAdmins = mysqli_fetch_assoc($queryNonValidAdmins)) {
                
                $table_nonValid  .= "<tr>";
-               $table_nonValid  .= "<td></td>";
+               $table_nonValid  .= "<td>{$sNon}</td>";
+               $sNon++;
                $table_nonValid  .= "<td>{$fetchNonValidAdmins['storeAdmin_name']}</td>";
                $table_nonValid  .= "<td>{$fetchNonValidAdmins['storeAdmin_username']}</td>";
                $table_nonValid  .= "<td>{$fetchNonValidAdmins['storeAdmin_code']}</td>";
@@ -225,11 +235,12 @@
             $table_Export  .= "<th>Delete</th>";
             $table_Export  .= "</tr>";
 
-
+            $sExp = 1;
             while ($fetchExportAdmins = mysqli_fetch_assoc($queryExportAdmins)) {
                
                $table_Export  .= "<tr>";
-               $table_Export  .= "<td></td>";
+               $table_Export  .= "<td>{$sExp}</td>";
+               $sExp++;
                $table_Export  .= "<td>{$fetchExportAdmins['storeAdmin_name']}</td>";
                $table_Export  .= "<td>{$fetchExportAdmins['storeAdmin_username']}</td>";
                $table_Export  .= "<td>{$fetchExportAdmins['storeAdmin_code']}</td>";
@@ -276,11 +287,12 @@
             $table_Invisible  .= "<th>Delete</th>";
             $table_Invisible  .= "</tr>";
 
-
+            $sInv = 1;
             while ($fetchInvisibleAdmins = mysqli_fetch_assoc($queryInvisibleAdmins)) {
                
                $table_Invisible  .= "<tr>";
-               $table_Invisible  .= "<td></td>";
+               $table_Invisible  .= "<td>{$sInv}</td>";
+               $sInv++;
                $table_Invisible  .= "<td>{$fetchInvisibleAdmins['storeAdmin_name']}</td>";
                $table_Invisible  .= "<td>{$fetchInvisibleAdmins['storeAdmin_username']}</td>";
                $table_Invisible  .= "<td>{$fetchInvisibleAdmins['storeAdmin_code']}</td>";
@@ -328,11 +340,15 @@
              $table_searchByName   .= "<th>Delete</th>";
              $table_searchByName  .= "</tr>";
 
+             $sName = 1;
+
+
              while ($fetchSearchByName = mysqli_fetch_assoc($querySearchByName)) {
                 
 
                 $table_searchByName  .= "<tr>";
-                $table_searchByName  .= "<td></td>";
+                $table_searchByName  .= "<td>{$sName}</td>";
+                $sName++;
                 $table_searchByName .= "<td>{$fetchSearchByName['storeAdmin_name']}</td>";
                 $table_searchByName  .= "<td>{$fetchSearchByName['storeAdmin_username']}</td>";
                 $table_searchByName  .= "<td>{$fetchSearchByName['storeAdmin_code']}</td>";
