@@ -84,13 +84,15 @@
               $table .= "</tr>";
 
 
-             $serialAll = 1;
+             $i = $per_pages - 1;
+
+             $serialNumber = ($per_pages * $page) - $i;
 
               while ($fetchAllTheFiles = mysqli_fetch_assoc($queryAllTheFiles)) {
                   
                 $table .= "<tr>";
-                $table .= "<td>{$serialAll}</td>";
-                $serialAll++;
+                $table .= "<td>{$serialNumber}</td>";
+                $serialNumber++;
                 $table .= "<td>{$fetchAllTheFiles['file_no']}</td>";
                 $table .= "<td>{$fetchAllTheFiles['file_picker']}</td>";
                 $table .= "<td>{$fetchAllTheFiles['file_user']}</td>";

@@ -76,15 +76,34 @@
 
 
 
-        $i =1;
+       
+          
+      
+          $i = $per_pages - 1;   // this gives us 4
 
-   	    	while ($fetchAllFiles = mysqli_fetch_assoc($queryOfAllTheFiles)) {
+          // the 1 ,is where we want our serial number to start from
 
-             
+          // Getting serial Number 
+          // use the number of items per pages which is 5
+          // then get the number of each page
+          // deduct it from 4
+          //why we had to deduct it from 4 , is to make sure the serial number start from 1
+          //but if we change the 4(which is the $i) to $per_pages
+          //the serial number starts from 0
+          //so if your $per_pages is 10,
+          // that means in that aspect, the 4 has to change to 9
+
+          // then echo the result and then increment it
+
+          $serialNumber = ($per_pages * $page) - $i;
+
+   	    	while ($fetchAllFiles = mysqli_fetch_assoc($queryOfAllTheFiles) ) {
+
 
    	    		$table .= "<tr>";
-            $table .=  "<td>{$i}</td>"; 
-              $i++;
+            
+            $table .=  "<td>{$serialNumber}</td>"; 
+              $serialNumber++;
    	    		$table .= "<td>{$fetchAllFiles['file_no']}</td>";
    	    		$table .= "<td>{$fetchAllFiles['file_picker']}</td>";
    	    		$table .= "<td>{$fetchAllFiles['file_user']}</td>";

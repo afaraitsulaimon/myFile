@@ -1,9 +1,9 @@
 <?php
-   if (isset($_POST['man_storeAdminSearchFBut'])) {
+   if (isset($_POST['man_storeAdminSearchFBut']) || isset($_GET['paginated'])) {
    	    
    	    $errManageAdmin = array();
 
-   	    if ($_POST['man_storeAdminDept'] == 'allAdmins') {
+   	    if (isset($_POST['man_storeAdminDept']) && $_POST['man_storeAdminDept'] == 'allAdmins'  || isset($_GET['paginated'])) {
    	    	
    	    	$allTheAdmins = "SELECT * FROM store_admin";
 
@@ -17,6 +17,42 @@
 
    	    	$rowsOfAllAdmins = mysqli_num_rows($queryAllTheAdmins);
 
+          //define how many per page
+
+          $itemPerPages = 10;
+
+           $numbers_of_pages = ceil($rowsOfAllAdmins/$itemPerPages);
+
+            //the current page the user is on
+           // the page in this $_GET['page'] is from
+            // the for loop below
+            //in displaying the links to the pages
+            //which is the ?pages = '.$pages.'
+            //the below says
+            //if the page is not set, it still be on page 1
+            //but if set which is the else
+            // then the page should load the page requested
+
+            if (isset($_GET['page']) && !empty($_GET['page'])) {
+              $page = $_GET['page'];
+            }else{
+              
+              $page = 1;
+
+
+            }
+
+            //determine the starting limit number to display
+
+            $page_first_result = ($page-1) * $itemPerPages;
+
+            $allOfTheStoreAdmin = "SELECT * FROM store_admin LIMIT " . $page_first_result . ',' . $itemPerPages ;
+
+            $queryAllOfTheStoreAdmin = mysqli_query($connection,$allOfTheStoreAdmin);
+
+
+          $nosOfAllTheStoreAdmin = mysqli_num_rows($queryAllOfTheStoreAdmin);
+
    	    	$table = "<table class='table-striped table-bordered' align='center'>";
    	    	$table .= "<tr>";
    	    	$table .= "<th>S/N</th>";
@@ -27,13 +63,30 @@
    	    	$table .= "<th>Registered Date</th>";
    	    	$table .= "</tr>";
           
-          $allA = 1;
+         $i = $itemPerPages - 1;   // this gives us 9
 
-   	    	while ($fetchAllAdmins = mysqli_fetch_assoc($queryAllTheAdmins)) {
+         // the 1 ,is where we want our serial number to start from
+
+          // Getting serial Number 
+          // use the number of items per pages which is 10
+          // then get the number of each page
+          // deduct it from 9
+          //why we had to deduct it from 9 , is to make sure the serial number start from 1
+          //but if we change the 9(which is the $i) to $itemPerPages
+          //the serial number starts from 0
+          //so if your $per_pages is 5,
+          // that means in that aspect, the 9 has to change to 4 which we did calculation for using 
+         //$i = $itemPerPages - 1;
+
+          // then echo the result and then increment it
+
+          $serialNumbers = ($itemPerPages * $page) - $i;
+
+   	    	while ($fetchAllAdmins = mysqli_fetch_assoc($queryAllOfTheStoreAdmin)) {
 
    	    		$table .= "<tr>";
-   	    		$table .= "<td>{$allA}</td>";
-            $allA++;
+   	    		$table .= "<td>{$serialNumbers}</td>";
+            $serialNumbers++;
    	    		$table .= "<td>{$fetchAllAdmins['storeAdmin_name']}</td>";
    	    		$table .= "<td>{$fetchAllAdmins['storeAdmin_username']}</td>";
    	    		$table .= "<td>{$fetchAllAdmins['storeAdmin_code']}</td>";
@@ -47,6 +100,14 @@
    	    	$table .= "</table>";
 
    	    	echo $table;
+
+          //displaying the links to the pages
+          
+          for ($page = 1; $page <= $numbers_of_pages ; $page++) { 
+
+               echo '<button><a href="manage-store-admins.php?page='. $page . '&paginated">'. $page .'</a></button>';
+              }    
+
 
    	    }elseif($_POST['man_storeAdminDept'] == 'LC') {
    	    	
