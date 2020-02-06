@@ -1,9 +1,9 @@
 <?php
-   if (isset($_POST['man_storeAdminSearchFBut'])) {
+   if (isset($_POST['man_storeAdminSearchFBut']) || isset($_GET['paginated'])) {
    	    
    	    $errManageAdmin = array();
 
-   	    if ($_POST['man_storeAdminDept'] == 'allAdmins') {
+   	    if (isset($_POST['man_storeAdminDept']) && $_POST['man_storeAdminDept'] == 'allAdmins'  || isset($_GET['paginated'])) {
    	    	
    	    	$allTheAdmins = "SELECT * FROM store_admin";
 
@@ -17,6 +17,42 @@
 
    	    	$rowsOfAllAdmins = mysqli_num_rows($queryAllTheAdmins);
 
+          //define how many per page
+
+          $itemPerPages = 10;
+
+           $numbers_of_pages = ceil($rowsOfAllAdmins/$itemPerPages);
+
+            //the current page the user is on
+           // the page in this $_GET['page'] is from
+            // the for loop below
+            //in displaying the links to the pages
+            //which is the ?pages = '.$pages.'
+            //the below says
+            //if the page is not set, it still be on page 1
+            //but if set which is the else
+            // then the page should load the page requested
+
+            if (isset($_GET['page']) && !empty($_GET['page'])) {
+              $page = $_GET['page'];
+            }else{
+              
+              $page = 1;
+
+
+            }
+
+            //determine the starting limit number to display
+
+            $page_first_result = ($page-1) * $itemPerPages;
+
+            $allOfTheStoreAdmin = "SELECT * FROM store_admin LIMIT " . $page_first_result . ',' . $itemPerPages ;
+
+            $queryAllOfTheStoreAdmin = mysqli_query($connection,$allOfTheStoreAdmin);
+
+
+          $nosOfAllTheStoreAdmin = mysqli_num_rows($queryAllOfTheStoreAdmin);
+
    	    	$table = "<table class='table-striped table-bordered' align='center'>";
    	    	$table .= "<tr>";
    	    	$table .= "<th>S/N</th>";
@@ -26,11 +62,31 @@
    	    	$table .= "<th>Department</th>";
    	    	$table .= "<th>Registered Date</th>";
    	    	$table .= "</tr>";
+          
+         $i = $itemPerPages - 1;   // this gives us 9
 
-   	    	while ($fetchAllAdmins = mysqli_fetch_assoc($queryAllTheAdmins)) {
+         // the 1 ,is where we want our serial number to start from
+
+          // Getting serial Number 
+          // use the number of items per pages which is 10
+          // then get the number of each page
+          // deduct it from 9
+          //why we had to deduct it from 9 , is to make sure the serial number start from 1
+          //but if we change the 9(which is the $i) to $itemPerPages
+          //the serial number starts from 0
+          //so if your $per_pages is 5,
+          // that means in that aspect, the 9 has to change to 4 which we did calculation for using 
+         //$i = $itemPerPages - 1;
+
+          // then echo the result and then increment it
+
+          $serialNumbers = ($itemPerPages * $page) - $i;
+
+   	    	while ($fetchAllAdmins = mysqli_fetch_assoc($queryAllOfTheStoreAdmin)) {
 
    	    		$table .= "<tr>";
-   	    		$table .= "<td></td>";
+   	    		$table .= "<td>{$serialNumbers}</td>";
+            $serialNumbers++;
    	    		$table .= "<td>{$fetchAllAdmins['storeAdmin_name']}</td>";
    	    		$table .= "<td>{$fetchAllAdmins['storeAdmin_username']}</td>";
    	    		$table .= "<td>{$fetchAllAdmins['storeAdmin_code']}</td>";
@@ -44,6 +100,14 @@
    	    	$table .= "</table>";
 
    	    	echo $table;
+
+          //displaying the links to the pages
+          
+          for ($page = 1; $page <= $numbers_of_pages ; $page++) { 
+
+               echo '<button><a href="manage-store-admins.php?page='. $page . '&paginated">'. $page .'</a></button>';
+              }    
+
 
    	    }elseif($_POST['man_storeAdminDept'] == 'LC') {
    	    	
@@ -72,11 +136,14 @@
           $table .= "<th>Delete</th>";
    	    	$table .= "</tr>";
 
+        
+         $sLc = 1;
 
    	    	while ($fetchLcAdmins = mysqli_fetch_assoc($queryLcAdmins)) {
    	    		
    	    		$table .= "<tr>";
-   	    		$table .= "<td></td>";
+   	    		$table .= "<td>{$sLc}</td>";
+            $sLc++;
    	    		$table .= "<td>{$fetchLcAdmins['storeAdmin_name']}</td>";
    	    		$table .= "<td>{$fetchLcAdmins['storeAdmin_username']}</td>";
    	    		$table .= "<td>{$fetchLcAdmins['storeAdmin_code']}</td>";
@@ -123,11 +190,12 @@
           $table_bills .= "<th>Delete</th>";
    	    	$table_bills  .= "</tr>";
 
-
+          $sBills = 1;
    	    	while ($fetchBillsAdmins = mysqli_fetch_assoc($queryBillsAdmins)) {
    	    		
    	    		$table_bills  .= "<tr>";
-   	    		$table_bills  .= "<td></td>";
+   	    		$table_bills  .= "<td>{$sBills}</td>";
+            $sBills++;
    	    		$table_bills  .= "<td>{$fetchBillsAdmins['storeAdmin_name']}</td>";
    	    		$table_bills  .= "<td>{$fetchBillsAdmins['storeAdmin_username']}</td>";
    	    		$table_bills  .= "<td>{$fetchBillsAdmins['storeAdmin_code']}</td>";
@@ -174,11 +242,14 @@
             $table_nonValid  .= "<th>Delete</th>";
             $table_nonValid  .= "</tr>";
 
+            $sNon = 1;
+
 
             while ($fetchNonValidAdmins = mysqli_fetch_assoc($queryNonValidAdmins)) {
                
                $table_nonValid  .= "<tr>";
-               $table_nonValid  .= "<td></td>";
+               $table_nonValid  .= "<td>{$sNon}</td>";
+               $sNon++;
                $table_nonValid  .= "<td>{$fetchNonValidAdmins['storeAdmin_name']}</td>";
                $table_nonValid  .= "<td>{$fetchNonValidAdmins['storeAdmin_username']}</td>";
                $table_nonValid  .= "<td>{$fetchNonValidAdmins['storeAdmin_code']}</td>";
@@ -225,11 +296,12 @@
             $table_Export  .= "<th>Delete</th>";
             $table_Export  .= "</tr>";
 
-
+            $sExp = 1;
             while ($fetchExportAdmins = mysqli_fetch_assoc($queryExportAdmins)) {
                
                $table_Export  .= "<tr>";
-               $table_Export  .= "<td></td>";
+               $table_Export  .= "<td>{$sExp}</td>";
+               $sExp++;
                $table_Export  .= "<td>{$fetchExportAdmins['storeAdmin_name']}</td>";
                $table_Export  .= "<td>{$fetchExportAdmins['storeAdmin_username']}</td>";
                $table_Export  .= "<td>{$fetchExportAdmins['storeAdmin_code']}</td>";
@@ -276,11 +348,12 @@
             $table_Invisible  .= "<th>Delete</th>";
             $table_Invisible  .= "</tr>";
 
-
+            $sInv = 1;
             while ($fetchInvisibleAdmins = mysqli_fetch_assoc($queryInvisibleAdmins)) {
                
                $table_Invisible  .= "<tr>";
-               $table_Invisible  .= "<td></td>";
+               $table_Invisible  .= "<td>{$sInv}</td>";
+               $sInv++;
                $table_Invisible  .= "<td>{$fetchInvisibleAdmins['storeAdmin_name']}</td>";
                $table_Invisible  .= "<td>{$fetchInvisibleAdmins['storeAdmin_username']}</td>";
                $table_Invisible  .= "<td>{$fetchInvisibleAdmins['storeAdmin_code']}</td>";
@@ -328,11 +401,15 @@
              $table_searchByName   .= "<th>Delete</th>";
              $table_searchByName  .= "</tr>";
 
+             $sName = 1;
+
+
              while ($fetchSearchByName = mysqli_fetch_assoc($querySearchByName)) {
                 
 
                 $table_searchByName  .= "<tr>";
-                $table_searchByName  .= "<td></td>";
+                $table_searchByName  .= "<td>{$sName}</td>";
+                $sName++;
                 $table_searchByName .= "<td>{$fetchSearchByName['storeAdmin_name']}</td>";
                 $table_searchByName  .= "<td>{$fetchSearchByName['storeAdmin_username']}</td>";
                 $table_searchByName  .= "<td>{$fetchSearchByName['storeAdmin_code']}</td>";

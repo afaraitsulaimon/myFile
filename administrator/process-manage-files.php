@@ -1,11 +1,15 @@
 <?php
-   if (isset($_POST['manFileSearchBut'])) {
+   if (isset($_POST['manFileSearchBut']) || isset($_GET['paginate'])) {
    	    
    	    $errManageFiles = array();
 
-   	    if ($_POST['man_FileDept'] == 'allFiles') {
-   	    	
+   	    if (isset($_POST['man_FileDept']) && $_POST['man_FileDept'] == 'allFiles' || isset($_GET['paginate'])) {
+   	    
+
+
    	    	$allTheFiles = "SELECT * FROM file_details";
+
+
 
    	    	$queryAllTheFiles = mysqli_query($connection,$allTheFiles);
 
@@ -17,6 +21,49 @@
 
    	    	$rowsOfAllFiles = mysqli_num_rows($queryAllTheFiles);
 
+          //define how many per page
+
+          $per_pages = 5;
+
+           $numbers_of_pages = ceil($rowsOfAllFiles/$per_pages);
+          
+           //the current page the user is on
+          // the page in this $_GET['page'] is from
+           // the for loop below
+           //in displaying the links to the pages
+           //which is the ?pages = '.$pages.'
+           //the below says
+           //if the page is not set, it still be on page 1
+           //but if set which is the else
+           // then the page should load the page requested
+
+           if (isset($_GET['page']) && !empty($_GET['page'])) {
+             $page = $_GET['page'];
+           }else{
+             
+             $page = 1;
+
+
+           }
+
+
+           //determine the starting limit number to display
+
+           $page_first_result = ($page-1) * $per_pages;
+
+           $allOfTheFiles = "SELECT * FROM file_details LIMIT " . $page_first_result . ',' . $per_pages ;
+
+     
+
+           $queryOfAllTheFiles = mysqli_query($connection, $allOfTheFiles);
+
+           $nosOfAllTheFiles = mysqli_num_rows($queryOfAllTheFiles);
+
+           
+
+
+
+
    	    	$table = "<table class='table-striped table-bordered' align='center'>";
    	    	$table .= "<tr>";
    	    	$table .= "<th>S/N</th>";
@@ -27,16 +74,45 @@
    	    	$table .= "<th>Date</th>";
    	    	$table .= "</tr>";
 
-   	    	while ($fetchAllFiles = mysqli_fetch_assoc($queryAllTheFiles)) {
+
+
+       
+          
+      
+          $i = $per_pages - 1;   // this gives us 4
+
+          // the 1 ,is where we want our serial number to start from
+
+          // Getting serial Number 
+          // use the number of items per pages which is 5
+          // then get the number of each page
+          // deduct it from 4
+          //why we had to deduct it from 4 , is to make sure the serial number start from 1
+          //but if we change the 4(which is the $i) to $per_pages
+          //the serial number starts from 0
+          //so if your $per_pages is 10,
+          // that means in that aspect, the 4 has to change to 9
+
+          // then echo the result and then increment it
+
+          $serialNumber = ($per_pages * $page) - $i;
+
+   	    	while ($fetchAllFiles = mysqli_fetch_assoc($queryOfAllTheFiles) ) {
+
 
    	    		$table .= "<tr>";
-   	    		$table .= "<td></td>";
+            
+            $table .=  "<td>{$serialNumber}</td>"; 
+              $serialNumber++;
    	    		$table .= "<td>{$fetchAllFiles['file_no']}</td>";
    	    		$table .= "<td>{$fetchAllFiles['file_picker']}</td>";
    	    		$table .= "<td>{$fetchAllFiles['file_user']}</td>";
    	    		$table .= "<td>{$fetchAllFiles['department']}</td>";
    	    		$table .= "<td>{$fetchAllFiles['picked_date']}</td>";
+           
    	    		$table .= "</tr>";
+
+           
 
 
    	    	}
@@ -45,8 +121,19 @@
 
    	    	echo $table;
 
+
+          //displaying the links to the pages
+          
+          for ($page = 1; $page <= $numbers_of_pages ; $page++) { 
+
+               echo '<button><a href="manage-files.php?page='. $page . '&paginate">'. $page .'</a></button>';
+              }       
+
+
+
    	    }elseif($_POST['man_FileDept'] == 'LC') {
    	    	
+
 
    	    	$lcFiles = "SELECT * FROM file_details WHERE department = 'LC' ";
 
@@ -57,6 +144,7 @@
    	    		die("could not query QUERY LC FILES" .mysqli_error($connection));
    	    	}
 
+         
 
    	    	$rowsOfLcFiles = mysqli_num_rows($queryLcFiles);
 
@@ -72,11 +160,13 @@
           $table .= "<th>Delete</th>";
    	    	$table .= "</tr>";
 
+          $a =1;
 
    	    	while ($fetchLcFiles = mysqli_fetch_assoc($queryLcFiles)) {
    	    		
    	    		$table .= "<tr>";
-   	    		$table .= "<td></td>";
+   	    		$table .= "<td>{$a}</td>";
+            $a++;
    	    		$table .= "<td>{$fetchLcFiles['file_no']}</td>";
    	    		$table .= "<td>{$fetchLcFiles['file_picker']}</td>";
    	    		$table .= "<td>{$fetchLcFiles['file_user']}</td>";
@@ -125,11 +215,13 @@
           $table_bills .= "<th>Delete</th>";
    	    	$table_bills  .= "</tr>";
 
-
+        $b =1;
    	    	while ($fetchBillsFiles = mysqli_fetch_assoc($queryBillsFiles)) {
    	    		
    	    		  $table_bills .= "<tr>";
-            $table_bills .= "<td></td>";
+            $table_bills .= "<td>{$b}</td>";
+
+            $b++;
             $table_bills .= "<td>{$fetchBillsFiles['file_no']}</td>";
             $table_bills .= "<td>{$fetchBillsFiles['file_picker']}</td>";
             $table_bills .= "<td>{$fetchBillsFiles['file_user']}</td>";
@@ -175,12 +267,14 @@
             $table_nonValid  .= "<th>Edit</th>";
             $table_nonValid  .= "<th>Delete</th>";
             $table_nonValid  .= "</tr>";
+     $n = 1;
 
 
             while ($fetchNonValidFiles = mysqli_fetch_assoc($queryNonValidFiles)) {
                
               $table_nonValid .= "<tr>";
-            $table_nonValid .= "<td></td>";
+            $table_nonValid .= "<td>{$n}</td>";
+            $n++;
             $table_nonValid .= "<td>{$fetchNonValidFiles['file_no']}</td>";
             $table_nonValid .= "<td>{$fetchNonValidFiles['file_picker']}</td>";
             $table_nonValid .= "<td>{$fetchNonValidFiles['file_user']}</td>";
@@ -228,11 +322,12 @@
             $table_Export  .= "<th>Delete</th>";
             $table_Export  .= "</tr>";
 
-
+           $e =1;
             while ($fetchExportFiles = mysqli_fetch_assoc($queryExportFiles)) {
                
                  $table_Export .= "<tr>";
-               $table_Export .= "<td></td>";
+               $table_Export .= "<td>{$e}</td>";
+               $e++;
                $table_Export .= "<td>{$fetchExportFiles['file_no']}</td>";
                $table_Export .= "<td>{$fetchExportFiles['file_picker']}</td>";
                $table_Export .= "<td>{$fetchExportFiles['file_user']}</td>";
@@ -279,11 +374,14 @@
             $table_Invisible  .= "<th>Delete</th>";
             $table_Invisible  .= "</tr>";
 
+            $inv = 1;
 
             while ($fetchInvisibleFiles = mysqli_fetch_assoc($queryInvisibleFiles)) {
                
                  $table_Invisible .= "<tr>";
-               $table_Invisible .= "<td></td>";
+               $table_Invisible .= "<td>{$inv}</td>";
+               $inv++;
+
                $table_Invisible .= "<td>{$fetchInvisibleFiles['file_no']}</td>";
                $table_Invisible .= "<td>{$fetchInvisibleFiles['file_picker']}</td>";
                $table_Invisible .= "<td>{$fetchInvisibleFiles['file_user']}</td>";
@@ -331,11 +429,14 @@
              $table_searchByFileNo   .= "<th>Delete</th>";
              $table_searchByFileNo  .= "</tr>";
 
+             $sNo = 1;
+
              while ($fetchSearchByFileNo = mysqli_fetch_assoc($querySearchByFileNo)) {
                 
 
                  $table_searchByFileNo .= "<tr>";
-               $table_searchByFileNo .= "<td></td>";
+               $table_searchByFileNo .= "<td>{$sNo}</td>";
+               $sNo++;
                $table_searchByFileNo .= "<td>{$fetchSearchByFileNo['file_no']}</td>";
                $table_searchByFileNo .= "<td>{$fetchSearchByFileNo['file_picker']}</td>";
                $table_searchByFileNo .= "<td>{$fetchSearchByFileNo['file_user']}</td>";
